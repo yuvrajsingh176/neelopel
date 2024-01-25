@@ -1,0 +1,14 @@
+.body{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    grid-template-rows: repeat(3,1fr);
+
+}
+@media (max-width:767px) {
+    .body{
+        display: flex;
+        flex-direction: column;
+        height: screen;
+    }
+}
