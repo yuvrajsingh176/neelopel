@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Modal.css";
 
 const Modal = ({ data, handleModal, handleSubmit, id }) => {
@@ -15,12 +15,33 @@ const Modal = ({ data, handleModal, handleSubmit, id }) => {
 
     setValidEmail(isValidEmail);
         };
-    useEffect(() => {
-    
-        checkemail(email)
-    },[email])
+   
+  useEffect(() => {
+    checkemail(email);
+  }, [email]);
 
+  useEffect(() => {
+    setName(carddata ? carddata.name : "");
+    setEmail(carddata ? carddata.email : "");
+    setNumber(carddata ? carddata.phone : "");
+    setWebsite(carddata ? carddata.url : "");
+  }, [carddata]);
 
+  const modalRef = useRef(null);
+
+  const handleOutsideClick = (e) => {
+    if (modalRef.current && !modalRef.current.contains(e.target)) {
+      handleModal();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("click", handleOutsideClick);
+    };
+  }, [handleModal]);
   useEffect(() => {
     setName(carddata.name || "");
     setEmail(carddata.email || "");
@@ -28,14 +49,15 @@ const Modal = ({ data, handleModal, handleSubmit, id }) => {
     setWebsite(carddata.url || "");
   }, [carddata]);
 
+  
   return (
     <div className="modalBackground">
-      <div className="modalContainer">
+      <div   className="modalContainer">
               <div style={{display:"flex",justifyContent:"space-between"}}>
                   <div className="title" >
                   <p>Basic Modal</p>
                   </div>
-<button style={{backgroundColor:"white",color:"black",border:"none",outline:"none"}}>X</button>
+<button       onClick={() => handleModal()} style={{backgroundColor:"white",color:"black",border:"none",outline:"none"}}>X</button>
               </div>
               <div style={{ height: "1px", backgroundColor: "black" }}></div>
         <div className="bd">
